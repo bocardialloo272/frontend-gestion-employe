@@ -1,4 +1,5 @@
 pipeline {
+    // agent windows
     agent {
         label 'agent-windows'
     }
