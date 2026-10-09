@@ -1,4 +1,5 @@
 pipeline {
+    // agent windows
     agent {
         label 'agent-windows'
     }
@@ -18,8 +19,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat "docker build -t %DOCKERHUB_USER%/%IMAGE_NAME%:%IMAGE_TAG% ."
-            }
+                bat "docker build -t %DOCKERHUB_USER%/%IMAGE_NAME%:%IMAGE_TAG% -t %DOCKERHUB_USER%/%IMAGE_NAME%:latest ."
         }
 
         stage('Push to Docker Hub') {
@@ -30,8 +30,8 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     bat """
-                        docker login -u %DOCKER_USER% -p %DOCKER_PASS%
                         docker push %DOCKERHUB_USER%/%IMAGE_NAME%:%IMAGE_TAG%
+                        docker push %DOCKERHUB_USER%/%IMAGE_NAME%:latest
                     """
                 }
             }
